@@ -1,5 +1,7 @@
 # Diep.io Utilities
 
-Diep.io Utility Mod + Pathfinder for a kid tank game
+## Cheat for Diep.io, can be useful for bots.
+
 WARNING: Pathfinding algorithm is not working WHILE this message is shown
+
 [Click to install](https://github.com/MiguelEXE/DiepIOUtilities/raw/master/diepioutils.user.js)
