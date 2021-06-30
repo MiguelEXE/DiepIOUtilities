@@ -9,6 +9,10 @@
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @run-at       document-start
+// @homepage     https://github.com/MiguelEXE/DiepIOUtilities
+// @supportURL   https://github.com/MiguelEXE/DiepIOUtilities/issues
+// @downloadURL  https://github.com/MiguelEXE/DiepIOUtilities/raw/master/diepioutils.user.js
+// @updateURL    https://github.com/MiguelEXE/DiepIOUtilities/raw/master/diepioutils.user.js
 // ==/UserScript==
 
 const INPUT = {
