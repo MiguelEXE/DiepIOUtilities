@@ -9,8 +9,9 @@
 // @run-at       document-start
 // @homepage     https://github.com/MiguelEXE/DiepIOUtilities
 // @supportURL   https://github.com/MiguelEXE/DiepIOUtilities/issues
-// @downloadURL  https://github.com/MiguelEXE/DiepIOUtilities/raw/master/diepioutils.user.js
-// @updateURL    https://github.com/MiguelEXE/DiepIOUtilities/raw/master/diepioutils.user.js
+// @downloadURL  https://raw.githubusercontent.com/MiguelEXE/DiepIOUtilities/master/diepioutils.user.js
+// @updateURL    https://raw.githubusercontent.com/MiguelEXE/DiepIOUtilities/master/diepioutils.user.js
+// @require      https://raw.githubusercontent.com/MiguelEXE/DiepIOUtilities/master/pathfinding-browser.min.js
 // ==/UserScript==
 
 (function() {
