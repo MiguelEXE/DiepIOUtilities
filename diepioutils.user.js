@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Diep.io Utilities
-// @version      0.1
+// @version      0.2
 // @description  Cheat for Diep.io, can be useful for bots.
 // @author       MiguelEX3
 // @match        https://diep.io/
