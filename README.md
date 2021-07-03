@@ -1,6 +1,6 @@
 # Diep.io Utilities
 
-## Cheat for Diep.io, can be useful for bots.
+## Diep.io Utility Mod
 
 WARNING: Pathfinding algorithm is not working WHILE this message is shown
 
