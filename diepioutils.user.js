@@ -19,9 +19,9 @@
     const VERSION = 0.3;
     const SUPPORTED_BUILD = "53e3bff79432137e3221b888ec230307a7540309";
     const CHANGELOG = `Diep.io Utilities v${VERSION}.
-    We doesnt use more heap to get the level, just using canvas
-    Added getEdgeCoords function
-    now Diep.io Utilities can be called in DevTools console!`;
+    We doesn't use more heap to get the level, just using canvas.
+    Added getEdgeCoords function.
+    Now Diep.io Utilities can be called in DevTools console!`;
     const INPUT = {
         leftMouse: 0b000000000001,
         upKey: 0b000000000010,
@@ -63,6 +63,7 @@
         error.style.color = "#ff0000";
         error.innerText = `Opps, Diep.io Utilities is not working.
         Exception ${message}.
+        Version: ${VERSION}
 
         Details: ${details}`;
         logs.appendChild(error);
