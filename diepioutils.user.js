@@ -16,7 +16,12 @@
 
 (function() {
     'use strict';
+    const VERSION = 0.3;
     const SUPPORTED_BUILD = "53e3bff79432137e3221b888ec230307a7540309";
+    const CHANGELOG = `Diep.io Utilities v${VERSION}.
+    We doesnt use more heap to get the level, just using canvas
+    Added getEdgeCoords function
+    now Diep.io Utilities can be called in DevTools console!`;
     const INPUT = {
         leftMouse: 0b000000000001,
         upKey: 0b000000000010,
@@ -161,7 +166,7 @@
 
     let info = document.createElement("div");
     info.style.color = "#0000ff";
-    info.innerText = `Welcome to Diep.io Utilities.`;
+    info.innerText = `Welcome to Diep.io Utilities v${VERSION}.`;
     logs.appendChild(info);
 
     let isHided = false;
@@ -199,7 +204,8 @@
             automode -- enters in automode and starts to kill all resources until get on the specified level. NOTE: AUTOMODE CANNOT BE STOPPED
             hide -- hide this console, you can show the console by pressing /
             info -- get some information about diep.io
-            show -- show the diep.io default console`;
+            show -- show the diep.io default console
+            changelog -- show the changelog to the current version`;
         }else if(cmd == "disconnect"){
             unsafeWindow.input.execute("lb_reconnect");
             return "OK, reconnecting...";
@@ -218,7 +224,8 @@
             toggleConsole();
             return "Hiding!";
         }else if(cmd == "info"){
-            return `Supported build: ${SUPPORTED_BUILD}
+            return `Running version ${VERSION}
+            Supported build: ${SUPPORTED_BUILD}
             Running build: ${getRunningBuildVersion()}
             
             Player level: ${latestLvl}`;
@@ -226,6 +233,8 @@
             unsafeWindow.input.execute("con_toggle");
             toggleConsole();
             return "Showing Diep.io Console...";
+        }else if(cmd == "changelog"){
+            return CHANGELOG;
         }
         return new Error("This command is not valid.");
     }
