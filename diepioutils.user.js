@@ -181,18 +181,62 @@
         }
     }
 
-    let latestLvl = 0;
-    CanvasRenderingContext2D.prototype.fillText = new Proxy(CanvasRenderingContext2D.prototype.fillText, {
-        apply: function(target, thisArgs, args){
-            if(args[0].includes("Lvl")) latestLvl = args[0].split(" ")[1];
-            target.apply(thisArgs, args);
-        }
-    });
     //thanks ABCxFF and Excigma for getting this
     const getEdgeCoords = () => {
         const POINTER = 25682;
         return [MEMORY.f32[POINTER-1], MEMORY.f32[POINTER], MEMORY.f32[POINTER+1], MEMORY.f32[POINTER+2]];
     }
+    
+    const DiepIOUtils = {
+        SUPPORTED_BUILD,
+        latestPlayerLvl: 0,
+        getRunningBuildVersion,
+        toggleConsole,
+        getEdgeCoords,
+        searchValue: function(value, type){
+            let values = [];
+            type = type ? type : "i32";
+            for(let i=0;i<MEMORY[type].length;i++)if(MEMORY[type][i]==value)values.push(i);
+            return values;
+        },
+        testValues: async function(array, value, valueToTest, filter, type){
+            const _wait = (ms) => new Promise(function(r){setTimeout(r, ms)});
+            type = type ? type : "i32";
+            for(let i=0;i<array.length;i++){
+                unsafeWindow.console.debug(`Testing ${array[i]} in ${type}`);
+                MEMORY[type][array[i]] = valueToTest;
+                await _wait(50);
+                if(filter(valueToTest, value)) {
+                    MEMORY[type][array[i]] = value;
+                    return [array[i], type];
+                }
+                MEMORY[type][array[i]] = value;
+            }
+            return [];
+        },
+        deepSearchValues: function(value, filter, type){
+            let values = [];
+            type = type ? type : "i32";
+            for(let i=0;i<MEMORY[type].length;i++){
+                let value2 = MEMORY[type][i];
+                unsafeWindow.console.log(value, i, value2);
+                if(filter(i, value)) values.push([i, value2]);
+            }
+            return values;
+        }
+    }
+    unsafeWindow.DiepIOUtils = DiepIOUtils;
+
+    let latestLvl = 0;
+    CanvasRenderingContext2D.prototype.fillText = new Proxy(CanvasRenderingContext2D.prototype.fillText, {
+        apply: function(target, thisArgs, args){
+            if(args[0].includes("Lvl")){
+                latestLvl = Number(args[0].split(" ")[1]);
+                DiepIOUtils.latestPlayerLvl = Number(args[0].split(" ")[1]);
+            };
+            target.apply(thisArgs, args);
+        }
+    });
 
     function commandHandler(command=""){
         let cmd = command.split(" ")[0];
@@ -252,45 +296,6 @@
         else commandDiv.innerHTML+=`<p>< ${returnedValue.replace(/\n/g, "<br>")}</p>`;
         logs.scrollTo(0,logs.scrollHeight);
     }
-
-    const DiepIOUtils = {
-        SUPPORTED_BUILD,
-        getRunningBuildVersion,
-        toggleConsole,
-        getEdgeCoords,
-        searchValue: function(value, type){
-            let values = [];
-            type = type ? type : "i32";
-            for(let i=0;i<MEMORY[type].length;i++)if(MEMORY[type][i]==value)values.push(i);
-            return values;
-        },
-        testValues: async function(array, value, valueToTest, filter, type){
-            const _wait = (ms) => new Promise(function(r){setTimeout(r, ms)});
-            type = type ? type : "i32";
-            for(let i=0;i<array.length;i++){
-                unsafeWindow.console.debug(`Testing ${array[i]} in ${type}`);
-                MEMORY[type][array[i]] = valueToTest;
-                await _wait(50);
-                if(filter(valueToTest, value)) {
-                    MEMORY[type][array[i]] = value;
-                    return [array[i], type];
-                }
-                MEMORY[type][array[i]] = value;
-            }
-            return [];
-        },
-        deepSearchValues: function(value, filter, type){
-            let values = [];
-            type = type ? type : "i32";
-            for(let i=0;i<MEMORY[type].length;i++){
-                let value2 = MEMORY[type][i];
-                unsafeWindow.console.log(value, i, value2);
-                if(filter(i, value)) values.push([i, value2]);
-            }
-            return values;
-        }
-    }
-    unsafeWindow.DiepIOUtils = DiepIOUtils;
 
     let isTyping = false;
     unsafeWindow.addEventListener("keydown", e => {
