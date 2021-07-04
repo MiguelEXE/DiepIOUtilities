@@ -51,9 +51,12 @@
     //-1250 # arena's left x coord (left is negative in coding)
     //1250 # arena's bottom y coord (bottom is positive in coding)
     //1250 # arena's right x coord (right is positive in coding)
-    const finder = new PF.AStarFinder();
+    const finder = new PF.AStarFinder({
+        allowDiagonal: false,
+        dontCrossCorners: true
+    });
     
-    let canRunUtils = true;    
+    let canRunUtils = true; 
     let console = document.createElement("div");
     let logs = document.createElement("div");
     let input = document.createElement("input");
@@ -87,6 +90,14 @@
         return runningVersion;
     }
 
+    //thanks ABCxFF and Excigma for getting this
+    const getEdgeCoords = () => {
+        const POINTER = 25561;
+        return [MEMORY.f32[POINTER-2], MEMORY.f32[POINTER-1], MEMORY.f32[POINTER], MEMORY.f32[POINTER+1]];
+    }
+
+    let grid;
+    
     //thanks ABCxFF for this memory hook
     let postRun;
     let trye = 0;
@@ -181,12 +192,6 @@
         }
     }
 
-    //thanks ABCxFF and Excigma for getting this
-    const getEdgeCoords = () => {
-        const POINTER = 25682;
-        return [MEMORY.f32[POINTER-1], MEMORY.f32[POINTER], MEMORY.f32[POINTER+1], MEMORY.f32[POINTER+2]];
-    }
-    
     const DiepIOUtils = {
         SUPPORTED_BUILD,
         latestPlayerLvl: 0,
@@ -219,7 +224,6 @@
             type = type ? type : "i32";
             for(let i=0;i<MEMORY[type].length;i++){
                 let value2 = MEMORY[type][i];
-                unsafeWindow.console.log(value, i, value2);
                 if(filter(i, value)) values.push([i, value2]);
             }
             return values;
@@ -233,7 +237,7 @@
             if(args[0].includes("Lvl")){
                 latestLvl = Number(args[0].split(" ")[1]);
                 DiepIOUtils.latestPlayerLvl = Number(args[0].split(" ")[1]);
-            };
+            }
             target.apply(thisArgs, args);
         }
     });
@@ -244,6 +248,7 @@
 
         if(cmd == "help"){
             return `help -- shows command list
+            init -- inits grid (essential for pathfinding)
             disconnect -- disconnect you from the server
             pathfind -- pathfinds a path to an user
             automode -- enters in automode and starts to kill all resources until get on the specified level. NOTE: AUTOMODE CANNOT BE STOPPED
@@ -259,11 +264,11 @@
             if(!player) return new Error("Inform a player name");
             return new Error("WIP Command");
         }else if(cmd == "automode"){
-            const toLevel = args[0];
-            if(!toLevel) return new Error("Inform a level to upgrade, NOTE: AUTOMODE CANNOT BE STOPPED.");
+            const toLevel = Number(args[0]);
+            if(!args[0]) return new Error("Inform a level to upgrade, NOTE: AUTOMODE CANNOT BE STOPPED.");
             if(Number.isNaN(toLevel)) return new Error("Invalid level.");
-            if(Number(toLevel) > 45) return new Error("Your specified level is greather than 45.");
-            if(latestLvl > Number(toLevel)) return new Error("Your specified level is minor than your current level.");
+            if(toLevel > 45) return new Error("Your specified level is greather than 45.");
+            if(latestLvl > toLevel) return new Error("Your specified level is minor than your current level.");
             return new Error("WIP Command");
         }else if(cmd == "hide"){
             toggleConsole();
@@ -280,6 +285,12 @@
             return "Showing Diep.io Console...";
         }else if(cmd == "changelog"){
             return CHANGELOG;
+        }else if(cmd == "init"){
+            const edgeCoords = getEdgeCoords();
+            unsafeWindow.console.log(edgeCoords);
+            const x = edgeCoords[1] - edgeCoords[3];
+            const y = edgeCoords[2] - edgeCoords[0];
+            grid = new PF.Grid(x, y);
         }
         return new Error("This command is not valid.");
     }
