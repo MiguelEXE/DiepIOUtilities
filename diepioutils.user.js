@@ -11,7 +11,7 @@
 // @supportURL   https://github.com/MiguelEXE/DiepIOUtilities/issues
 // @downloadURL  https://raw.githubusercontent.com/MiguelEXE/DiepIOUtilities/master/diepioutils.user.js
 // @updateURL    https://raw.githubusercontent.com/MiguelEXE/DiepIOUtilities/master/diepioutils.user.js
-// @require      https://raw.githubusercontent.com/MiguelEXE/DiepIOUtilities/master/pathfinding-browser.min.js
+// @require      https://raw.githubusercontent.com/MiguelEXE/DiepIOUtilities/master/pathfinding-browser.js
 // ==/UserScript==
 
 (function() {
